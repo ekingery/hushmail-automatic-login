@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# If it exists, check ~/.private_bashrc file for login credentials
+if [ -f ~/.private_bashrc ]; then
+    source ~/.private_bashrc
+fi
+
+# Enter credentials here if they were not set in the ~./private_bashrc file
+HUSH_USER=${HUSH_USER:=your-username}
+HUSH_PASS=${HUSH_PASS:=your-password}
+
+TMPDIR=${TMPDIR:=/tmp}
+cookie_file=$TMPDIR/hush_cookies.txt
+
+# Define all the constants and pre-determined form POST data
+hush_login_url="https://www.hushmail.com/preview/hushmail/"
+hush_auth_url="https://www.hushmail.com/preview/hushmail/authentication/?format=json"
+content_type_header='Content-Type: application/x-www-form-urlencoded; charset=UTF-8'
+valid_login_str='"formValidation":true}'
+token_regex='name=\"form_token\" value=\"[^"]*\"'
+pre_append_str="form_token="
+huser="&hush_username=${HUSH_USER}%40hushmail.com"
+hpass="&hush_passphrase=${HUSH_PASS}&hush_customerid=0000000000000000"
+hauth="&processAjax=authenticationform"
+post_append_str=$huser$hpass$hauth
+
+# Make a request to the login url and grab the CSRF token
+csrf_token=$(curl -sS -c $cookie_file $hush_login_url | grep -o "$token_regex" | cut -f4 -d \")
+
+# Pull together the form data to be posted the auth page
+postdata=$pre_append_str$csrf_token$post_append_str
+
+# Make the login request
+login_result=$(curl -sS -b $cookie_file -c $cookie_file -d $postdata -X POST -H "$content_type_header" $hush_auth_url)
+
+# Make sure the results returned from the HTTP request match a successful login
+is_valid_login=$(echo $login_result | grep -o $valid_login_str)
+
+# Cleanup
+rm $cookie_file
+
+# Exit 0 (success) if the json response indicates the login was successful
+[[ $is_valid_login == $valid_login_str ]] && exit 0
+
+# Handle the error case
+echo "login failed with results: $login_result" && exit 1

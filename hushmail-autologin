@@ -9,6 +9,9 @@ fi
 HUSH_USER=${HUSH_USER:=your-username}
 HUSH_PASS=${HUSH_PASS:=your-password}
 
+# escape special chars in the password
+HUSH_PASS=$(echo -e "$HUSH_PASS" | od -An -tx1 | tr ' ' % | xargs printf "%s")
+
 TMPDIR=${TMPDIR:=/tmp}
 cookie_file=$TMPDIR/hush_cookies.txt
 

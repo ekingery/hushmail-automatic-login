@@ -6,8 +6,8 @@ if [ -f ~/.private_bashrc ]; then
 fi
 
 # Enter credentials here if they were not set in the ~./private_bashrc file
-# Make sure to user the full email address including domain
-HUSH_EMAIL=${HUSH_EMAIL:=your-email-address}
+# Make sure to use the full email address including domain
+HUSH_EMAIL=${HUSH_EMAIL:=your-email-address@hushmail.com}
 HUSH_PASS=${HUSH_PASS:=your-password}
 
 # Hack to url encode (not RFC compliant) the whole username and password

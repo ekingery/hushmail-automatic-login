@@ -22,7 +22,7 @@ token_regex='name=\"form_token\" value=\"[^"]*\"'
 # Make a request to the login url and grab the CSRF token
 csrf_token=$(curl -sS -c $cookie_file $hush_login_url | grep -m 1 -o "$token_regex" | cut -f4 -d \")
 
-# Pull together the form data to be posted the auth page
+# Pull together the form data to be posted to the auth page
 form_token="form_token=$csrf_token"
 form_user="hush_username=${HUSH_EMAIL}"
 form_pass="hush_passphrase=${HUSH_PASS}"

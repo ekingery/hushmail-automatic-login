@@ -15,5 +15,5 @@ The script checks the return value to make sure the login was successful. If not
 ### Example Cron Job
 
 	MAILTO=your-email@regular-provider.com
-	# login to hushmail every day at 12:38am
-	38 0 * * * ~/bin/hushmail-autologin
+	# login to hushmail every Monday at 12:38am
+	38 0 * * Mon ~/bin/hushmail-autologin

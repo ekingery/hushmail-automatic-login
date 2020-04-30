@@ -14,8 +14,8 @@ TMPDIR=${TMPDIR:=/tmp}
 cookie_file=$TMPDIR/hush_cookies.txt
 
 # Define all the constants and pre-determined form POST data
-hush_login_url="https://www.hushmail.com/preview/hushmail/"
-hush_auth_url="https://www.hushmail.com/preview/hushmail/authentication/?format=json"
+hush_login_url="https://www.hushmail.com/mail/"
+hush_auth_url="https://www.hushmail.com/mail/authentication/?format=json"
 valid_login_str='"formValidation":true}'
 token_regex='name=\"form_token\" value=\"[0-9a-zA-Z_]*\"'
 
